@@ -15,7 +15,7 @@
                     </div>
                 </div>
 
-              
+
             </div>
 
 
@@ -37,53 +37,56 @@
 
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                    <table id="example" class="display table dataTable table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>S No</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Message</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <?php
-                                    $i = 1;
-                                    if (!empty($contact)) {
-                                        foreach ($contact as $row) {
-                                    ?>
-                                            <tbody>
+                                        <table id="example" class="display table dataTable table-striped table-bordered">
+                                            <thead>
                                                 <tr>
-                                                    <td><?php echo $i; ?></td>
-                                                    <td><?php echo $row['name']; ?></td>
-                                                    <td><?php echo $row['email']; ?></td>
-                                                    <td><?php echo $row['phone']; ?></td>
-                                                    <td><?php echo $row['message']; ?></td>
-                                                    <td>
-                                                        <a href="<?php echo base_url() . 'admin_Dashboard/contact_query?BdID=' . encryptId($row['cid']); ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')"><i class="fas fa-trash-alt"></i></a>
-                                                    </td>
-
+                                                    <th>S No</th>
+                                                    <th>Date</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Message</th>
+                                                    <th>Actions</th>
                                                 </tr>
-                                            </tbody>
-                                    <?php
-                                            $i++;
-                                        }
-                                    } else {
-                                        // echo  'No contact query exists';
-                                    }
-                                    ?>
-                                </table>
+                                            </thead>
+                                            <?php
+                                            $i = 1;
+                                            if (!empty($contact)) {
+                                                foreach ($contact as $row) {
+                                            ?>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><?php echo $i; ?></td>
+                                                            ;
+                                                            <td><?php echo date('m-d-Y H:i:A', strtotime($row['create_date']));?></td>
+                                                            <td><?php echo $row['name']; ?></td>
+                                                            <td><?php echo $row['email']; ?></td>
+                                                            <td><?php echo $row['phone']; ?></td>
+                                                            <td><?php echo $row['message']; ?></td>
+                                                            <td>
+                                                                <a href="<?php echo base_url() . 'admin_Dashboard/contact_query?BdID=' . encryptId($row['cid']); ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')"><i class="fas fa-trash-alt"></i></a>
+                                                            </td>
+
+                                                        </tr>
+                                                    </tbody>
+                                            <?php
+                                                    $i++;
+                                                }
+                                            } else {
+                                                // echo  'No contact query exists';
+                                            }
+                                            ?>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-    </div>
+            </section>
+        </div>
 
-    <?php include('template/footer.php') ?>
-            <?php include('template/footer_link.php'); ?>
-            </body>
+        <?php include('template/footer.php') ?>
+        <?php include('template/footer_link.php'); ?>
+        </body>
 
-            </html>
+        </html>

@@ -16,7 +16,7 @@
                     </div>
 
                     <div class="col-sm-2  align-self-center">
-                        <a href="<?= base_url('admin_Dashboard/add_mentor') ?>" class="btn btn-primary align-left">Add mentor</a>
+                        <a href="<?= base_url('admin_Dashboard/add_faculty') ?>" class="btn btn-primary align-left">Add faculty</a>
                     </div>
 
                 </div>
@@ -41,15 +41,9 @@
                                         <thead>
                                             <tr>
                                                 <th>S No</th>
+                                                <th>Date</th>
                                                 <th>Name</th>
-                                                <th>Number</th>
-                                                <th>Email</th>
-                                                <th>Experience</th>
-                                                <th>Profession</th>
                                                 <th>Designation</th>
-                                                <th>Linkedin</th>
-                                                <th>Mentor Availablity timing</th>
-                                                <th>Description</th>
                                                 <th>Disable</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -62,23 +56,18 @@
                                             ?>
                                                     <tr>
                                                         <td><?php echo $i; ?></td>
-                                                        <td><img src="<?= base_url() ?>uploads/mentors/<?= $fetchrow['image'] ?>" width="60"><?= $fetchrow['name']; ?></td>
-                                                        <td><?= $fetchrow['number']; ?></td>
-                                                        <td><?= $fetchrow['email']; ?></td>
-                                                         <td><?= $fetchrow['experience']; ?></td>
-                                                        <td><?= $fetchrow['profession']; ?></td>
+                                                        <td><?php echo date('m-d-Y H:i:A',strtotime($fetchrow['create_date'])) ?></td>
+                                                        <td><img src="<?= base_url() ?>uploads/faculty/<?= $fetchrow['image'] ?>" width="60"> &nbsp; <?= $fetchrow['name']; ?></td>
                                                         <td><?= $fetchrow['designation']; ?></td>
                                                        
-                                                        <td><?= $fetchrow['linkedin']; ?></td>
-                                                        <td><?= $fetchrow['available_timing']; ?></td>
-                                                        <td><?= wordwrap($fetchrow['description'], 0 , 60); ?></td>
+                                                        
                                                         <td>
-                                                            <a href="<?php echo base_url() . 'admin_Dashboard/disable/' . $fetchrow['mid'] . '/mentors/' . (($fetchrow['is_visible'] == '1') ? '0' : '1'); ?>" class="btn btn-light"><?php if ($fetchrow['is_visible'] == '1') { ?><i class="fas fa-eye"></i><?php } else { ?> <i class="fas fa-eye-slash"></i><?php } ?></a>
+                                                            <a href="<?php echo base_url() . 'admin_Dashboard/disable/' . $fetchrow['mid'] . '/faculty/' . (($fetchrow['is_visible'] == '1') ? '0' : '1'); ?>" class="btn btn-light"><?php if ($fetchrow['is_visible'] == '1') { ?><i class="fas fa-eye"></i><?php } else { ?> <i class="fas fa-eye-slash"></i><?php } ?></a>
                                                         </td>
                                                         <td>
-                                                            <a href="<?php echo base_url() . 'admin_Dashboard/edit_mentors/' . encryptId($fetchrow['mid']); ?>" class="btn btn-success edit"><i class="fas fa-pencil-alt"></i></a>
+                                                            <a href="<?php echo base_url() . 'admin_Dashboard/edit_faculty/' . encryptId($fetchrow['mid']); ?>" class="btn btn-success edit"><i class="fas fa-pencil-alt"></i></a>
 
-                                                            <a href="<?php echo base_url() . 'admin_Dashboard/mentors?BdID=' . encryptId($fetchrow['mid']) . '&img=' . $fetchrow['image'] ?>" class="btn btn-danger" onclick="return confirm('Continue to delete ?')"><i class="fas fa-trash-alt"></i></a>
+                                                            <a href="<?php echo base_url() . 'admin_Dashboard/faculty?BdID=' . encryptId($fetchrow['mid']) . '&img=' . $fetchrow['image'] ?>" class="btn btn-danger" onclick="return confirm('Continue to delete ?')"><i class="fas fa-trash-alt"></i></a>
                                                         </td>
                                                     </tr>
                                             <?php

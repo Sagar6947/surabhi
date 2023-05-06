@@ -19,7 +19,7 @@ class Admin_Dashboard extends CI_Controller
         $data['title'] = "Home";
         $data['contact_query'] = $this->CommonModal->getNumRow('contact_query');
         $data['mentee'] = $this->CommonModal->getNumRow('mentee');
-        $data['mentors'] = $this->CommonModal->getNumRow('mentors');
+        $data['mentors'] = $this->CommonModal->getNumRow('faculty');
         $data['join_us'] = $this->CommonModal->getNumRow('join_us');
         $data['initiatives'] = $this->CommonModal->getNumRow('initiatives');
         $data['blog'] = $this->CommonModal->getNumRow('blog');
@@ -28,20 +28,114 @@ class Admin_Dashboard extends CI_Controller
         $this->load->view('admin/dashboard', $data);
     }
 
-    public function mentors()
+    public function faculty()
     {
-        $data['title'] = "Mentors";
+        $data['title'] = "Facultys";
         $BdID = $this->input->get('BdID');
         $img = $this->input->get('img');
         if (decryptId($BdID) != '') {
-            $delete = $this->CommonModal->deleteRowById('mentors', array('mid' => decryptId($BdID)));
+            $delete = $this->CommonModal->deleteRowById('faculty', array('mid' => decryptId($BdID)));
             unlink('./uploads/mentors/' . $img);
-            redirect('admin_Dashboard/mentors');
+            redirect('admin_Dashboard/faculty');
             exit;
         }
-        $data['mentors'] = $this->CommonModal->getAllRowsInOrder('bc_mentors',  'mid', 'DESC');
-        $this->load->view('admin/mentors', $data);
+        $data['mentors'] = $this->CommonModal->getAllRowsInOrder('bc_faculty',  'mid', 'DESC');
+        $this->load->view('admin/faculty', $data);
     }
+
+    public function add_faculty()
+    {
+        $data['title'] = "Add Faculty";
+
+        $data['tag'] = "add";
+
+        if (count($_POST) > 0) {
+            $post = $this->input->post();
+
+            $post['image'] = imageUpload('img', 'uploads/faculty/');
+
+            $savedata = $this->CommonModal->insertRowReturnId('faculty', $post);
+            if ($savedata) {
+                $this->session->set_userdata('msg', '<div class="alert alert-success">Faculty Add Successfully</div>');
+            } else {
+                $this->session->set_userdata('msg', '<div class="alert alert-success">Faculty Add Successfully</div>');
+            }
+            redirect(base_url('admin_Dashboard/faculty'));
+        } else {
+            $this->load->view('admin/add_faculty', $data);
+        }
+    }
+
+    public function edit_faculty($id)
+    {
+
+        $data['title'] = 'Update mentors';
+        $data['tag'] = 'edit';
+        $tid = decryptId($id);
+        $data['mentors'] = $this->CommonModal->getRowById('faculty', 'mid', $tid);
+
+        if (count($_POST) > 0) {
+            $post = $this->input->post();
+            $image_url = $post['image'];
+
+            if ($_FILES['img']['name'] != '') {
+                $img = imageUpload('img', 'uploads/faculty/');
+                $post['image'] = $img;
+                if ($image_url != "") {
+                    unlink('uploads/faculty/' . $image_url);
+                }
+            }
+            $category_id = $this->CommonModal->updateRowById('faculty', 'mid', $tid, $post);
+            if ($category_id) {
+                $this->session->set_userdata('msg', '<div class="alert alert-success">Faculty Updated successfully</div>');
+            } else {
+                $this->session->set_userdata('msg', '<div class="alert alert-success">Faculty Updated successfully</div>');
+            }
+            redirect(base_url('admin_Dashboard/faculty'));
+        } else {
+            $this->load->view('admin/add_faculty', $data);
+        }
+    }
+
+
+    // public function notification()
+    // {
+
+    //     $data['title'] = "Notification Pop-Up";
+    //     $BdID = $this->input->get('BdID');
+    //     $img = $this->input->get('img');
+    //     if (decryptId($BdID) != '') {
+    //         $delete = $this->CommonModal->deleteRowById('bc_home_banner', array('bid' => decryptId($BdID)));
+    //         unlink('./uploads/notification/' . $img);
+    //         redirect('admin_Dashboard/notification');
+    //         exit;
+    //     }
+    //     $data['banner'] = $this->CommonModal->getAllRowsInOrder('bc_home_banner', 'bid', 'desc');
+    //     $this->load->view('admin/notification', $data);
+    // }
+
+    // public function add_notification()
+    // {
+
+    //     $data['title'] = 'Add Notification';
+    //     $data['tag'] = 'add';
+
+    //     if (count($_FILES) > 0) {
+    //         $post = $this->input->post();
+
+    //         $post['image'] = imageUpload('img', 'uploads/notification/');
+
+    //         $category_id = $this->CommonModal->insertRowReturnId('bc_home_banner', $post);
+    //         if ($category_id) {
+    //             $this->session->set_userdata('msg', '<div class="alert alert-success">Banner Updated successfully</div>');
+    //         } else {
+    //             $this->session->set_userdata('msg', '<div class="alert alert-success">Something went wrong</div>');
+    //         }
+    //         redirect(base_url('admin_Dashboard/banner'));
+    //     } else {
+    //         $this->load->view('admin/add_notification', $data);
+    //     }
+    // }
 
 
     public function mentee()
@@ -77,63 +171,6 @@ class Admin_Dashboard extends CI_Controller
         $this->load->view('admin/join_us', $data);
     }
 
-    public function add_mentor()
-    {
-        $data['title'] = "Add Mentors";
-
-        $data['tag'] = "add";
-
-        if (count($_POST) > 0) {
-            $post = $this->input->post();
-
-            $post['image'] = imageUpload('img', 'uploads/mentors/');
-
-            $savedata = $this->CommonModal->insertRowReturnId('mentors', $post);
-            if ($savedata) {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">Mentors Add Successfully</div>');
-            } else {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">Mentors Add Successfully</div>');
-            }
-            redirect(base_url('admin_Dashboard/mentors'));
-        } else {
-            $this->load->view('admin/add_mentors', $data);
-        }
-    }
-
-    public function edit_mentors($id)
-    {
-
-
-        $data['title'] = 'Update mentors';
-        $data['tag'] = 'edit';
-        $tid = decryptId($id);
-        $data['mentors'] = $this->CommonModal->getRowById('mentors', 'mid', $tid);
-
-        if (count($_POST) > 0) {
-            $post = $this->input->post();
-            $image_url = $post['image'];
-
-            if ($_FILES['img']['name'] != '') {
-                $img = imageUpload('img', 'uploads/mentors/');
-                $post['image'] = $img;
-                if ($image_url != "") {
-                    unlink('uploads/mentors/' . $image_url);
-                }
-            }
-            $category_id = $this->CommonModal->updateRowById('mentors', 'mid', $tid, $post);
-            if ($category_id) {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">mentors Updated successfully</div>');
-            } else {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">mentors Updated successfully</div>');
-            }
-            redirect(base_url('admin_Dashboard/mentors'));
-        } else {
-            $this->load->view('admin/add_mentors', $data);
-        }
-    }
-
-
-
     public function disable()
     {
         $id = $this->uri->segment(3);
@@ -151,9 +188,9 @@ class Admin_Dashboard extends CI_Controller
             $this->CommonModal->updateRowById($table, 'blog_id', $id, array('is_visible' => $status));
             redirect(base_url('admin_Dashboard/blogs'));
         }
-        if ($table == 'whats_new') {
+        if ($table == 'bc_notification') {
             $this->CommonModal->updateRowById($table, 'bid', $id, array('is_visible' => $status));
-            redirect(base_url('admin_Dashboard/whats_new'));
+            redirect(base_url('admin_Dashboard/notification'));
         }
         if ($table == 'initiatives') {
             $this->CommonModal->updateRowById($table, 'id', $id, array('is_visible' => $status));
@@ -161,81 +198,42 @@ class Admin_Dashboard extends CI_Controller
         }
     }
 
-    public function banner()
-    {
 
-        $data['title'] = "Success Stories";
-        $BdID = $this->input->get('BdID');
-        $img = $this->input->get('img');
-        if (decryptId($BdID) != '') {
-            $delete = $this->CommonModal->deleteRowById('bc_home_banner', array('bid' => decryptId($BdID)));
-            unlink('./uploads/banner/' . $img);
-            redirect('admin_Dashboard/banner');
-            exit;
-        }
-        $data['banner'] = $this->CommonModal->getAllRows('bc_home_banner');
-        $this->load->view('admin/banner', $data);
-    }
+    // public function edit_notification($id)
+    // {
 
-    public function add_banner()
-    {
+    //     $data['title'] = 'Update Notification';
+    //     $data['tag'] = 'edit';
 
-        $data['title'] = 'Add Stories';
-        $data['tag'] = 'add';
+    //     $tid = decryptId($id);
+    //     $data['banner'] = $this->CommonModal->getRowById('bc_home_banner', 'bid', $tid);
 
-        if (count($_FILES) > 0) {
-            $post = $this->input->post();
-
-            $post['image'] = imageUpload('img', 'uploads/banner/');
-
-            $category_id = $this->CommonModal->insertRowReturnId('bc_home_banner', $post);
-            if ($category_id) {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">Banner Updated successfully</div>');
-            } else {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">Something went wrong</div>');
-            }
-            redirect(base_url('admin_Dashboard/banner'));
-        } else {
-            $this->load->view('admin/add_banner', $data);
-        }
-    }
+    //     if (count($_POST) > 0) {
+    //         $post = $this->input->post();
 
 
-    public function edit_banner($id)
-    {
+    //         $image_url = $post['image'];
 
-        $data['title'] = 'Update Banner';
-        $data['tag'] = 'edit';
-
-        $tid = decryptId($id);
-        $data['banner'] = $this->CommonModal->getRowById('bc_home_banner', 'bid', $tid);
-
-        if (count($_POST) > 0) {
-            $post = $this->input->post();
+    //         if ($_FILES['img']['name'] != '') {
+    //             $img = imageUpload('img', 'uploads/notification/');
+    //             $post['image'] = $img;
+    //             if ($image_url != "") {
+    //                 unlink('uploads/notification/' . $image_url);
+    //             }
+    //         }
 
 
-            $image_url = $post['image'];
-
-            if ($_FILES['img']['name'] != '') {
-                $img = imageUpload('img', 'uploads/banner/');
-                $post['image'] = $img;
-                if ($image_url != "") {
-                    unlink('uploads/banner/' . $image_url);
-                }
-            }
-
-
-            $category_id = $this->CommonModal->updateRowById('bc_home_banner', 'bid', $tid, $post);
-            if ($category_id) {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">Banner Updated successfully</div>');
-            } else {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">Something went wrong</div>');
-            }
-            redirect(base_url('admin_Dashboard/banner'));
-        } else {
-            $this->load->view('admin/add_banner', $data);
-        }
-    }
+    //         $category_id = $this->CommonModal->updateRowById('bc_home_banner', 'bid', $tid, $post);
+    //         if ($category_id) {
+    //             $this->session->set_userdata('msg', '<div class="alert alert-success">Notification Updated successfully</div>');
+    //         } else {
+    //             $this->session->set_userdata('msg', '<div class="alert alert-success">Something went wrong</div>');
+    //         }
+    //         redirect(base_url('admin_Dashboard/notification'));
+    //     } else {
+    //         $this->load->view('admin/add_notification', $data);
+    //     }
+    // }
 
 
     public function newsletter_pdf()
@@ -270,36 +268,36 @@ class Admin_Dashboard extends CI_Controller
     }
 
 
-    public function whats_new()
+    public function notification()
     {
 
-        $data['title'] = "what's New";
+        $data['title'] = "Notification";
         $data['tag'] = 'edit';
 
 
-        $data['banner'] = $this->CommonModal->getRowById('bc_whats_new', 'bid', '1');
+        $data['banner'] = $this->CommonModal->getRowById('bc_notification', 'bid', '1');
 
         if (count($_POST) > 0) {
             $post = $this->input->post();
             $image_url = $post['image'];
 
             if ($_FILES['img']['name'] != '') {
-                $img = imageUpload('img',  'uploads/new/');
+                $img = imageUpload('img',  'uploads/notification/');
                 $post['image'] = $img;
                 if ($image_url != "") {
-                    unlink('uploads/new/' . $image_url);
+                    unlink('uploads/notification/' . $image_url);
                 }
             }
 
-            $category_id = $this->CommonModal->updateRowById('bc_whats_new', 'bid', '1', $post);
+            $category_id = $this->CommonModal->updateRowById('bc_notification', 'bid', '1', $post);
             if ($category_id) {
-                $this->session->set_userdata('msg', '<div class="alert alert-success">Banner Updated successfully</div>');
+                $this->session->set_userdata('msg', '<div class="alert alert-success">Notification Updated successfully</div>');
             } else {
                 $this->session->set_userdata('msg', '<div class="alert alert-success">Something went wrong</div>');
             }
-            redirect(base_url('admin_Dashboard/whats_new'));
+            redirect(base_url('admin_Dashboard/notification'));
         } else {
-            $this->load->view('admin/whats_new', $data);
+            $this->load->view('admin/notification', $data);
         }
     }
 

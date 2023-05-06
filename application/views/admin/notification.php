@@ -31,7 +31,7 @@
 
                                         <div class="col-md-12 col-lg-12 col-xl-12 text-right">
                                             <span>Status:</span>
-                                            <a href="<?php echo base_url() . 'admin_Dashboard/disable/' . $banner[0]['bid'] . '/whats_new/' . (($banner[0]['is_visible'] == 1) ? '0' : '1'); ?>" class="btn btn-light">
+                                            <a href="<?php echo base_url() . 'admin_Dashboard/disable/' . $banner[0]['bid'] . '/bc_notification/' . (($banner[0]['is_visible'] == 1) ? '0' : '1'); ?>" class="btn btn-light">
                                                 <?php if ($banner[0]['is_visible'] == 1) { ?><span class="badge badge-success">Active</span><?php } else { ?> <span class="badge badge-danger">Deactive</span><?php } ?>
 
                                             </a>
@@ -45,7 +45,7 @@
                                                         <input class="form-control pd-r-80" type="file" name="img" accept="image/png, image/jpg, image/jpeg">
 
                                                         <input type="hidden" name="image" value="<?= $banner['0']['image'] ?>">
-                                                        <img src="<?= base_url() ?>uploads/new/<?= $banner['0']['image'] ?>" height="50px">
+                                                        <img src="<?= base_url() ?>uploads/notification/<?= $banner['0']['image'] ?>" height="50px">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">

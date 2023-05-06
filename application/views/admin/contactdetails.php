@@ -80,6 +80,10 @@
                                                 <label class="">Telegram link</label>
                                                 <input class="form-control" type="text" name="telegram" value="<?= $row['telegram'] ?>">
                                             </div>
+                                            <div class="form-group col-md-12">
+                                                <label class="">Google Map (iframe)</label>
+                                                <textarea class="form-control" type="text" rows="5" name="map"><?= $row['map'] ?></textarea>
+                                            </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Update</button>
                             </div>

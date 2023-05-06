@@ -2,8 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-$config['base_url'] = 'http://localhost/admin/';
-// $config['base_url'] = 'https://www.thementorshipproject.in/';
+$config['base_url'] = 'http://localhost/surbhi/';
 
 $config['index_page'] = '';
 
